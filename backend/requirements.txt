@@ -1,0 +1,11 @@
+
+Django==5.2.4
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+twilio==9.10.1
+qrcode==8.2
+pillow==11.3.0
+python-dotenv
+django-cors-headers==4.9.0
+django-crispy-forms==2.4
+django-widget-tweaks==1.5.0
