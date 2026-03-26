@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Sidebar = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { logout } = useContext(AuthContext);
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     // Helper to check active state
     const isActive = (path) => location.pathname === path;
@@ -16,6 +22,7 @@ const Sidebar = () => {
             color: 'white',
             height: '100vh',
             padding: '20px',
+            boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
             boxShadow: '4px 0 10px rgba(0,0,0,0.1)'
@@ -48,7 +55,7 @@ const Sidebar = () => {
             </nav>
 
             <button
-                onClick={logout}
+                onClick={handleLogout}
                 style={{
                     background: 'rgba(255,255,255,0.1)',
                     color: 'white',
