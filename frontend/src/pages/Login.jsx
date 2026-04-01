@@ -18,7 +18,11 @@ const Login = () => {
         try {
             const res = await api.post('/login/', formData);
             login(res.data);
-            navigate('/dashboard');
+            if (res.data.role === 'doctor') {
+                navigate('/doctor-dashboard');
+            } else {
+                navigate('/dashboard');
+            }
         } catch (err) {
             setError('Invalid Credentials');
         }
@@ -42,7 +46,11 @@ const Login = () => {
                     const res = await api.post('/qr-login/', { qr_token: decodedText });
                     scanner.clear();
                     login(res.data);
-                    navigate('/dashboard');
+                    if (res.data.role === 'doctor') {
+                        navigate('/doctor-dashboard');
+                    } else {
+                        navigate('/dashboard');
+                    }
                 } catch (err) {
                     setError('Invalid QR Code');
                 }

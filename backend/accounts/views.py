@@ -88,8 +88,12 @@ class LoginAPI(APIView):
         if not user:
             return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
+        role = 'patient'
+        if hasattr(user, 'doctor_profile'):
+            role = 'doctor'
+
         tokens = get_tokens_for_user(user)
-        return Response({'tokens': tokens, 'msg': 'Login Successful'}, status=status.HTTP_200_OK)
+        return Response({'tokens': tokens, 'msg': 'Login Successful', 'role': role}, status=status.HTTP_200_OK)
 
 class QRLoginAPI(APIView):
     def post(self, request):
@@ -101,21 +105,31 @@ class QRLoginAPI(APIView):
             return Response({'error': 'Invalid QR Token'}, status=status.HTTP_400_BAD_REQUEST)
             
         tokens = get_tokens_for_user(user.user)
-        return Response({'tokens': tokens, 'msg': 'QR Login Successful'}, status=status.HTTP_200_OK)
+        return Response({'tokens': tokens, 'msg': 'QR Login Successful', 'role': 'patient'}, status=status.HTTP_200_OK)
 
 class ProfileAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        if hasattr(request.user, 'doctor_profile'):
+            doc = request.user.doctor_profile
+            return Response({
+                'role': 'doctor',
+                'full_name': doc.full_name,
+                'specialization': doc.specialization
+            }, status=status.HTTP_200_OK)
+
         try:
             if not hasattr(request.user, 'patient'):
-                return Response({'msg': 'User is not a patient'}, status=status.HTTP_404_NOT_FOUND)
+                return Response({'msg': 'User is not a patient or doctor'}, status=status.HTTP_404_NOT_FOUND)
             
             profile = request.user.patient.profile
             serializer = PatientProfileSerializer(profile)
-            return Response(serializer.data)
+            data = serializer.data
+            data['role'] = 'patient'
+            return Response(data, status=status.HTTP_200_OK)
         except PatientProfile.DoesNotExist:
-            return Response({'msg': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'msg': 'Profile not found', 'role': 'patient'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request):
         if not hasattr(request.user, 'patient'):

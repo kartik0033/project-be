@@ -52,6 +52,28 @@ const Sidebar = () => {
                 }}>
                     Profile
                 </Link>
+                <Link to="/records" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    padding: '12px 15px',
+                    background: isActive('/records') ? 'rgba(255,255,255,0.2)' : 'transparent',
+                    borderRadius: '8px',
+                    fontSize: '1.1rem',
+                    transition: 'background 0.3s'
+                }}>
+                    My Records
+                </Link>
+                <Link to="/appointments" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    padding: '12px 15px',
+                    background: isActive('/appointments') ? 'rgba(255,255,255,0.2)' : 'transparent',
+                    borderRadius: '8px',
+                    fontSize: '1.1rem',
+                    transition: 'background 0.3s'
+                }}>
+                    Appointments
+                </Link>
             </nav>
 
             <button

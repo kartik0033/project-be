@@ -16,8 +16,13 @@ export const AuthProvider = ({ children }) => {
                     const response = await api.get('/profile/');
                     setUser(response.data);
                 } catch (error) {
-                    console.error("Auth check failed", error);
-                    logout();
+                    if (error.response && error.response.status === 401) {
+                        console.error("Auth check failed with 401", error);
+                        logout();
+                    } else {
+                        // User is authenticated but might not have a profile generated yet (404)
+                        setUser({});
+                    }
                 }
             }
             setLoading(false);
@@ -28,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     const login = (data) => {
         localStorage.setItem('access_token', data.tokens.access);
         localStorage.setItem('refresh_token', data.tokens.refresh);
+        if (data.role) localStorage.setItem('user_role', data.role);
         api.defaults.headers.common['Authorization'] = `Bearer ${data.tokens.access}`;
         // Fetch profile immediately after login to set user
         api.get('/profile/').then(res => setUser(res.data)).catch(() => setUser({}));
@@ -36,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user_role');
         delete api.defaults.headers.common['Authorization'];
         setUser(null);
     };
@@ -44,8 +51,10 @@ export const AuthProvider = ({ children }) => {
         setUser(prev => ({ ...prev, ...userData }));
     };
 
+    const role = localStorage.getItem('user_role');
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, updateUser, loading }}>
+        <AuthContext.Provider value={{ user, role, login, logout, updateUser, loading }}>
             {children}
         </AuthContext.Provider>
     );
