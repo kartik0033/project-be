@@ -28,10 +28,10 @@ const DoctorDashboard = () => {
             </div>
             
             <div style={{ marginTop: '40px', background: 'white', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', textAlign: 'center' }}>
-                <h3 style={{ color: '#4a90e2', marginBottom: '15px' }}>Scan Patient QR Code</h3>
+                <h3 style={{ color: '#4ade80', marginBottom: '15px' }}>Scan Patient QR Code</h3>
                 <p style={{ color: '#7f8c8d', marginBottom: '25px' }}>Scan a patient's Health Card QR to securely access their medical history and upload new prescriptions.</p>
                 <Link to="/scanner">
-                    <button style={{ background: '#4a90e2', color: 'white', padding: '15px 30px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold' }}>
+                    <button style={{ background: '#4ade80', color: 'white', padding: '15px 30px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold' }}>
                         📷 Open Camera Scanner
                     </button>
                 </Link>

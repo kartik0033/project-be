@@ -18,7 +18,7 @@ const Sidebar = () => {
     return (
         <div style={{
             width: '250px',
-            background: 'linear-gradient(180deg, #4a90e2 0%, #005c97 100%)',
+            background: 'linear-gradient(180deg, #4ade80 0%, #16a34a 100%)',
             color: 'white',
             height: '100vh',
             padding: '20px',

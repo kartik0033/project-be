@@ -31,12 +31,12 @@ const PatientView = () => {
                 {patientData.records && patientData.records.length > 0 ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         {patientData.records.map((rec, i) => (
-                            <div key={i} style={{ background: '#f8f9fa', borderLeft: '4px solid #4a90e2', padding: '20px', borderRadius: '4px' }}>
+                            <div key={i} style={{ background: '#f8f9fa', borderLeft: '4px solid #4ade80', padding: '20px', borderRadius: '4px' }}>
                                 <h4 style={{ margin: '0 0 5px 0', color: '#2c3e50' }}>{rec.title}</h4>
                                 <p style={{ fontSize: '0.9rem', color: '#7f8c8d', margin: '0 0 10px 0' }}>{new Date(rec.date_uploaded).toLocaleString()}</p>
                                 <p style={{ margin: 0 }}>{rec.description || 'No description provided.'}</p>
                                 {rec.file && (
-                                    <a href={`http://127.0.0.1:8000${rec.file}`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '10px', color: '#4a90e2', textDecoration: 'none', fontWeight: 'bold' }}>
+                                    <a href={`http://127.0.0.1:8000${rec.file}`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '10px', color: '#4ade80', textDecoration: 'none', fontWeight: 'bold' }}>
                                         View Attached Document
                                     </a>
                                 )}
@@ -51,7 +51,7 @@ const PatientView = () => {
             </div>
 
             <div style={{ marginTop: '40px', background: 'white', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', textAlign: 'center' }}>
-                <h3 style={{ color: '#4a90e2', marginBottom: '15px' }}>Add Clinical Note / Prescription</h3>
+                <h3 style={{ color: '#4ade80', marginBottom: '15px' }}>Add Clinical Note / Prescription</h3>
                 <p style={{ color: '#7f8c8d', marginBottom: '25px' }}>Securely upload a new prescription or lab report to this patient's permanent record.</p>
                 <button style={{ background: '#2ecc71', color: 'white', padding: '15px 30px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '1.1rem', fontWeight: 'bold' }}>
                     + Upload New Record

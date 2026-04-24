@@ -116,7 +116,7 @@ const Login = () => {
                 )}
 
                 <div style={{ marginTop: '20px', fontSize: '0.9rem' }}>
-                    <p>Don't have an account? <a href="/register" style={{ color: '#4a90e2' }}>Register here</a></p>
+                    <p>Don't have an account? <a href="/register" style={{ color: '#4ade80' }}>Register here</a></p>
                 </div>
             </div>
         </div>

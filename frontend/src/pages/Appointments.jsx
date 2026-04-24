@@ -143,7 +143,7 @@ const Appointments = () => {
 
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                                 <button type="button" onClick={() => setShowModal(false)} style={{ padding: '10px 20px', background: '#eee', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Cancel</button>
-                                <button type="submit" style={{ padding: '10px 20px', background: '#4a90e2', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>Confirm Booking</button>
+                                <button type="submit" style={{ padding: '10px 20px', background: '#4ade80', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>Confirm Booking</button>
                             </div>
                         </form>
                     </div>

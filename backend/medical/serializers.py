@@ -7,9 +7,17 @@ class DoctorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
+    file_name = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = MedicalRecord
         fields = '__all__'
+        read_only_fields = ['patient']
+
+    def get_file_name(self, obj):
+        if obj.file:
+            return obj.file.name.split('/')[-1]
+        return None
 
 class AppointmentSerializer(serializers.ModelSerializer):
     doctor_name = serializers.CharField(source='doctor.full_name', read_only=True)

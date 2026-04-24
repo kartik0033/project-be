@@ -119,7 +119,7 @@ const Register = () => {
                 )}
 
                 <div style={{ marginTop: '20px', fontSize: '0.9rem' }}>
-                    <p>Already have an account? <a href="/login" style={{ color: '#4a90e2' }}>Login here</a></p>
+                    <p>Already have an account? <a href="/login" style={{ color: '#4ade80' }}>Login here</a></p>
                 </div>
             </div>
         </div>
