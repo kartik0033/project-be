@@ -12,12 +12,44 @@ class Doctor(models.Model):
     def __str__(self):
         return f"Dr. {self.full_name} ({self.specialization})"
 
+class ReportCategory(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+class ReportTitleSuggestion(models.Model):
+    category = models.ForeignKey(ReportCategory, on_delete=models.CASCADE, related_name='suggestions')
+    suggested_title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.category.name} - {self.suggested_title}"
+
+class Facility(models.Model):
+    FACILITY_TYPES = [
+        ('Hospital', 'Hospital'),
+        ('Clinic', 'Clinic'),
+        ('Lab', 'Lab'),
+        ('Other', 'Other')
+    ]
+    name = models.CharField(max_length=255)
+    address = models.TextField(blank=True)
+    facility_type = models.CharField(max_length=50, choices=FACILITY_TYPES, default='Hospital')
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
 class MedicalRecord(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medical_records')
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='issued_records')
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     file = models.FileField(upload_to='medical_records/')
+    report_time = models.DateTimeField(null=True, blank=True)
+    report_type = models.ForeignKey(ReportCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    provider_facility = models.ForeignKey(Facility, on_delete=models.SET_NULL, null=True, blank=True)
     date_uploaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

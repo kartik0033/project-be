@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const checkAuth = async () => {
-            const token = localStorage.getItem('access_token');
+            const token = sessionStorage.getItem('access_token');
             if (token) {
                 api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 try {
@@ -31,18 +31,18 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = (data) => {
-        localStorage.setItem('access_token', data.tokens.access);
-        localStorage.setItem('refresh_token', data.tokens.refresh);
-        if (data.role) localStorage.setItem('user_role', data.role);
+        sessionStorage.setItem('access_token', data.tokens.access);
+        sessionStorage.setItem('refresh_token', data.tokens.refresh);
+        if (data.role) sessionStorage.setItem('user_role', data.role);
         api.defaults.headers.common['Authorization'] = `Bearer ${data.tokens.access}`;
         // Fetch profile immediately after login to set user
         api.get('/profile/').then(res => setUser(res.data)).catch(() => setUser({}));
     };
 
     const logout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('user_role');
+        sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('refresh_token');
+        sessionStorage.removeItem('user_role');
         delete api.defaults.headers.common['Authorization'];
         setUser(null);
     };
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         setUser(prev => ({ ...prev, ...userData }));
     };
 
-    const role = localStorage.getItem('user_role');
+    const role = sessionStorage.getItem('user_role');
 
     return (
         <AuthContext.Provider value={{ user, role, login, logout, updateUser, loading }}>

@@ -1,6 +1,18 @@
-from rest_framework import viewsets, permissions
-from .models import Doctor, MedicalRecord, Appointment
-from .serializers import DoctorSerializer, MedicalRecordSerializer, AppointmentSerializer
+from rest_framework import viewsets, permissions, filters
+from .models import Doctor, MedicalRecord, Appointment, ReportCategory, Facility
+from .serializers import DoctorSerializer, MedicalRecordSerializer, AppointmentSerializer, ReportCategorySerializer, FacilitySerializer
+
+class ReportCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ReportCategory.objects.filter(is_active=True).prefetch_related('suggestions')
+    serializer_class = ReportCategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class FacilityViewSet(viewsets.ModelViewSet):
+    queryset = Facility.objects.all()
+    serializer_class = FacilitySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 
 class DoctorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Doctor.objects.all()

@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
 import { AuthContext } from './context/AuthContext';
 import Profile from './pages/Profile';
-import Dashboard from './pages/Dashboard';
+import PatientDashboard from './pages/PatientDashboard';
 import { BrowserRouter } from 'react-router-dom';
 import api from './api';
 
@@ -35,7 +35,7 @@ const renderWithContext = (component, userVal = mockUser) => {
 describe('Bug Verification Tests', () => {
 
     it('Dashboard handles relative QR code URL correctly', () => {
-        renderWithContext(<Dashboard />);
+        renderWithContext(<PatientDashboard />);
 
         const img = screen.getByAltText('Health Card QR');
         expect(img).toBeInTheDocument();

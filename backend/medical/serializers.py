@@ -1,13 +1,32 @@
 from rest_framework import serializers
-from .models import Doctor, MedicalRecord, Appointment
+from .models import Doctor, MedicalRecord, Appointment, ReportCategory, ReportTitleSuggestion, Facility
 
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = '__all__'
 
+class ReportTitleSuggestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportTitleSuggestion
+        fields = ['id', 'suggested_title']
+
+class ReportCategorySerializer(serializers.ModelSerializer):
+    suggestions = ReportTitleSuggestionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ReportCategory
+        fields = ['id', 'name', 'is_active', 'suggestions']
+
+class FacilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Facility
+        fields = '__all__'
+
 class MedicalRecordSerializer(serializers.ModelSerializer):
     file_name = serializers.SerializerMethodField(read_only=True)
+    report_type_name = serializers.CharField(source='report_type.name', read_only=True)
+    provider_facility_name = serializers.CharField(source='provider_facility.name', read_only=True)
 
     class Meta:
         model = MedicalRecord

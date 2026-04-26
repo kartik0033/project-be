@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from '../context/AuthContext';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
-import Dashboard from '../pages/Dashboard';
+import PatientDashboard from '../pages/PatientDashboard';
 import Profile from '../pages/Profile';
 import Records from '../pages/Records';
 import Appointments from '../pages/Appointments';
@@ -15,22 +15,22 @@ import QRScanner from '../components/QRScanner';
 import PatientView from '../pages/PatientView';
 
 const PatientRoute = ({ children }) => {
-  const token = localStorage.getItem('access_token');
-  const role = localStorage.getItem('user_role');
+  const token = sessionStorage.getItem('access_token');
+  const role = sessionStorage.getItem('user_role');
   return token && role === 'patient' ? children : <Navigate to="/login" />;
 };
 
 const DoctorRoute = ({ children }) => {
-  const token = localStorage.getItem('access_token');
-  const role = localStorage.getItem('user_role');
+  const token = sessionStorage.getItem('access_token');
+  const role = sessionStorage.getItem('user_role');
   return token && role === 'doctor' ? children : <Navigate to="/login" />;
 };
 
 const RootRedirect = () => {
-  const token = localStorage.getItem('access_token');
-  const role = localStorage.getItem('user_role');
+  const token = sessionStorage.getItem('access_token');
+  const role = sessionStorage.getItem('user_role');
   if (token) {
-      return role === 'doctor' ? <Navigate to="/doctor-dashboard" /> : <Navigate to="/dashboard" />;
+      return role === 'doctor' ? <Navigate to="/doctor-dashboard" /> : <Navigate to="/patient-dashboard" />;
   }
   return <Navigate to="/login" />;
 };
@@ -57,9 +57,9 @@ const AppRoutes = () => {
 
           {/* Patient Protected Routes (With Navbar Layout) */}
           <Route element={<Layout />}>
-            <Route path="/dashboard" element={
+            <Route path="/patient-dashboard" element={
               <PatientRoute>
-                <Dashboard />
+                <PatientDashboard />
               </PatientRoute>
             } />
             <Route path="/profile" element={

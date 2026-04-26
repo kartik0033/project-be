@@ -47,7 +47,7 @@ const QRScanner = () => {
             {error && <div style={{ color: '#e74c3c', background: '#fadbd8', padding: '10px', borderRadius: '5px', marginBottom: '20px', display: 'inline-block' }}>{error}</div>}
             
             {loading ? (
-                <div style={{ margin: '50px 0', fontSize: '1.2rem', color: '#4ade80' }}>Fetching Secure Records...</div>
+                <div style={{ margin: '50px 0', fontSize: '1.2rem', color: '#3b82f6' }}>Fetching Secure Records...</div>
             ) : (
                 <div id="reader" style={{ width: '100%', maxWidth: '500px', margin: '0 auto', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', borderRadius: '12px', overflow: 'hidden' }}></div>
             )}
