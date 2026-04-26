@@ -28,6 +28,11 @@ class PatientProfile(models.Model):
     age = models.PositiveIntegerField()
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     address = models.TextField()
+    blood_group = models.CharField(max_length=5, blank=True)
+    allergies = models.TextField(blank=True)
+    chronic_conditions = models.TextField(blank=True)
+    emergency_contact = models.CharField(max_length=15, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     qr_code_image = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
     def save(self, *args, **kwargs):

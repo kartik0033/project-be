@@ -26,11 +26,13 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class PatientProfileSerializer(serializers.ModelSerializer):
     aadhaar_number = serializers.CharField(source='patient.aadhaar_number', read_only=True)
+    mobile_number = serializers.CharField(source='patient.mobile_number', read_only=True)
     qr_code_image = serializers.ImageField(read_only=True)
+    profile_picture = serializers.ImageField(required=False)
 
     class Meta:
         model = PatientProfile
-        fields = ['full_name', 'age', 'gender', 'address', 'qr_code_image', 'aadhaar_number']
+        fields = ['full_name', 'age', 'gender', 'address', 'blood_group', 'allergies', 'chronic_conditions', 'emergency_contact', 'qr_code_image', 'profile_picture', 'aadhaar_number', 'mobile_number']
 
 class OTPSerializer(serializers.Serializer):
     mobile_number = serializers.CharField()

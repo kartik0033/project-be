@@ -50,6 +50,7 @@ class MedicalRecord(models.Model):
     report_time = models.DateTimeField(null=True, blank=True)
     report_type = models.ForeignKey(ReportCategory, on_delete=models.SET_NULL, null=True, blank=True)
     provider_facility = models.ForeignKey(Facility, on_delete=models.SET_NULL, null=True, blank=True)
+    visible_to_patient = models.BooleanField(default=True)
     date_uploaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

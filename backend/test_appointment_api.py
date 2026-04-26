@@ -48,10 +48,10 @@ def run_test():
     res = client.post('/api/medical/appointments/', data, format='json')
     if res.status_code == 201:
         app_id = res.data['id']
-        print(f"✅ Success: Patient booked appointment #{app_id}")
+        print(f"[SUCCESS] Patient booked appointment #{app_id}")
         print(f"Initial Status: {res.data['status']}")
     else:
-        print(f"❌ Failed to book: {res.data}")
+        print(f"[FAILED] Failed to book: {res.data}")
         return
 
     # 3. Doctor Logs In and Approves Appointment
@@ -64,18 +64,18 @@ def run_test():
     pending_app = next((a for a in appointments if a['id'] == app_id), None)
     
     if pending_app:
-        print(f"✅ Success: Doctor sees the appointment in their queue. Status: {pending_app['status']}")
+        print(f"[SUCCESS] Doctor sees the appointment in their queue. Status: {pending_app['status']}")
     else:
-        print("❌ Doctor cannot see the appointment!")
+        print("[FAILED] Doctor cannot see the appointment!")
         return
 
     # Doctor accepts it
     patch_data = {'status': 'Confirmed'}
     res = client.patch(f'/api/medical/appointments/{app_id}/', patch_data, format='json')
     if res.status_code == 200:
-        print(f"✅ Success: Doctor changed status to {res.data['status']}")
+        print(f"[SUCCESS] Doctor changed status to {res.data['status']}")
     else:
-        print(f"❌ Failed to update status: {res.data}")
+        print(f"[FAILED] Failed to update status: {res.data}")
         return
 
     # 4. Patient Logs back in to verify
@@ -85,11 +85,11 @@ def run_test():
     updated_app = next((a for a in res.data if a['id'] == app_id), None)
     
     if updated_app and updated_app['status'] == 'Confirmed':
-        print(f"✅ Success: Patient sees the updated status as '{updated_app['status']}'")
+        print(f"[SUCCESS] Patient sees the updated status as '{updated_app['status']}'")
     else:
-        print("❌ Patient did not see the confirmed status!")
+        print("[FAILED] Patient did not see the confirmed status!")
 
-    print("\n🎉 ALL TESTS PASSED! The workflow is working perfectly.")
+    print("\nALL TESTS PASSED! The workflow is working perfectly.")
 
 if __name__ == '__main__':
     run_test()

@@ -24,13 +24,21 @@ class MedicalRecordViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # Patients can only see their own records
-        if getattr(self.request.user, 'patient', None):
-            return MedicalRecord.objects.filter(patient=self.request.user.patient)
+        user = self.request.user
+        if hasattr(user, 'patient'):
+            return MedicalRecord.objects.filter(patient=user.patient, visible_to_patient=True)
+        elif hasattr(user, 'doctor_profile'):
+            return MedicalRecord.objects.filter(doctor=user.doctor_profile)
         return MedicalRecord.objects.none()
 
     def perform_create(self, serializer):
-        serializer.save(patient=self.request.user.patient)
+        user = self.request.user
+        if hasattr(user, 'doctor_profile'):
+            patient_id = self.request.data.get('patient_id')
+            patient = Patient.objects.get(id=patient_id)
+            serializer.save(patient=patient, doctor=user.doctor_profile)
+        else:
+            serializer.save(patient=user.patient)
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer

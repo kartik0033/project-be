@@ -29,32 +29,7 @@ const Sidebar = () => {
             transition: 'all 0.3s ease',
             position: 'relative'
         }}>
-            {/* Hamburger Menu Toggle (Matching the image style) */}
-            <div 
-                onClick={() => setIsOpen(!isOpen)}
-                style={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    cursor: 'pointer', 
-                    background: '#2563eb', // Blue background from image
-                    padding: '12px 10px', 
-                    borderRadius: '8px',
-                    color: 'white',
-                    alignSelf: isOpen ? 'flex-end' : 'center',
-                    marginBottom: '30px',
-                    transition: 'all 0.3s ease'
-                }}
-            >
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <div style={{ width: '24px', height: '3px', background: '#ffffff', marginBottom: '5px', borderRadius: '2px' }}></div>
-                    <div style={{ width: '24px', height: '3px', background: '#ffffff', marginBottom: '5px', borderRadius: '2px' }}></div>
-                    <div style={{ width: '16px', height: '3px', background: '#ffffff', borderRadius: '2px' }}></div>
-                </div>
-                <span style={{ fontSize: '10px', marginTop: '6px', fontWeight: 'bold', letterSpacing: '1px' }}>MENU</span>
-            </div>
-
-            {isOpen && <h2 style={{ marginBottom: '40px', fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center', color: '#2563eb' }}>Health Card</h2>}
+            <h2 style={{ marginBottom: '40px', fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center', color: '#2563eb' }}>Health Card</h2>
 
             <nav style={{ display: 'flex', flexDirection: 'column', gap: '15px', flex: 1, marginTop: isOpen ? '0' : '20px' }}>
                 <Link to="/patient-dashboard" style={{
@@ -123,6 +98,23 @@ const Sidebar = () => {
                 }}>
                     <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>📅</span>
                     {isOpen && "Appointments"}
+                </Link>
+
+                <Link to="/ai-summarizer" style={{
+                    color: isActive('/ai-summarizer') ? '#2563eb' : '#475569',
+                    textDecoration: 'none',
+                    padding: '12px 15px',
+                    background: isActive('/ai-summarizer') ? '#eff6ff' : 'transparent',
+                    borderRadius: '8px',
+                    fontSize: '1.1rem',
+                    fontWeight: isActive('/ai-summarizer') ? '600' : '400',
+                    transition: 'all 0.3s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: isOpen ? 'flex-start' : 'center'
+                }}>
+                    <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>✨</span>
+                    {isOpen && "AI Summarizer"}
                 </Link>
             </nav>
 

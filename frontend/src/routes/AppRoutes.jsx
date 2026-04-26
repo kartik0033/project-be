@@ -7,6 +7,7 @@ import PatientDashboard from '../pages/PatientDashboard';
 import Profile from '../pages/Profile';
 import Records from '../pages/Records';
 import Appointments from '../pages/Appointments';
+import AiSummarizer from '../pages/AiSummarizer';
 import Layout from '../components/Layout';
 
 // Doctor pages
@@ -75,6 +76,11 @@ const AppRoutes = () => {
             <Route path="/appointments" element={
               <PatientRoute>
                 <Appointments />
+              </PatientRoute>
+            } />
+            <Route path="/ai-summarizer" element={
+              <PatientRoute>
+                <AiSummarizer />
               </PatientRoute>
             } />
           </Route>

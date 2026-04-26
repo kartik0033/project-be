@@ -152,6 +152,37 @@ const Login = () => {
                         <p>Don't have an account? <a href="/register" style={{ color: '#1d4ed8', fontWeight: 'bold', textDecoration: 'none' }}>Register here</a></p>
                     </div>
                 )}
+
+                {/* Development Quick Login Buttons */}
+                <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px dashed #ccc', textAlign: 'center' }}>
+                    <p style={{ fontSize: '0.8rem', color: '#888', marginBottom: '10px' }}>Dev Quick Login</p>
+                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setRole('patient');
+                                setMethod('password');
+                                setFormData({ identifier: '928486833492', password: 'password123' });
+                            }}
+                            style={{ padding: '6px 12px', fontSize: '0.8rem', background: '#e0e7ff', color: '#4f46e5', border: '1px solid #c7d2fe', borderRadius: '4px', cursor: 'pointer' }}
+                        >
+                            Fill Patient
+                        </button>
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setRole('doctor');
+                                setMethod('password');
+                                setFormData({ identifier: '999999999999', password: 'doctorpass' });
+                            }}
+                            style={{ padding: '6px 12px', fontSize: '0.8rem', background: '#fce7f3', color: '#db2777', border: '1px solid #fbcfe8', borderRadius: '4px', cursor: 'pointer' }}
+                        >
+                            Fill Doctor
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
