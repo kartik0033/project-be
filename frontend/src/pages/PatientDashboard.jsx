@@ -96,8 +96,29 @@ const PatientDashboard = () => {
                 </div>
             </div>
 
-            {/* Digital ID Card Section - Reverted to Previous Style & Position */}
-            <div style={{ background: '#3170d6', borderRadius: '20px', padding: '25px', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 10px 25px rgba(49, 112, 214, 0.3)', marginBottom: '35px', position: 'relative', overflow: 'hidden' }}>
+            {/* Health Pulse Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+                <PulseWidget label="Blood Group" value={profile?.blood_group || 'N/A'} icon="🩸" color="#ef4444" />
+                <PulseWidget label="Heart Rate" value="72" unit="bpm" icon="💓" color="#ec4899" />
+                <PulseWidget label="Height" value="175" unit="cm" icon="📏" color="#3b82f6" />
+                <PulseWidget label="Weight" value="68" unit="kg" icon="⚖️" color="#10b981" />
+            </div>
+
+            {/* Digital ID Card Section - Restored previous style/alignment */}
+            <div style={{ 
+                background: '#3170d6', 
+                borderRadius: '20px', 
+                padding: '25px', 
+                color: 'white', 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                boxShadow: '0 10px 25px rgba(49, 112, 214, 0.3)', 
+                marginBottom: '35px', 
+                position: 'relative', 
+                overflow: 'hidden' 
+            }}>
+                {/* Background Pattern */}
                 <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, opacity: 0.05, backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
                 <div style={{ position: 'absolute', top: '-80px', right: '-40px', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)', borderRadius: '50%' }}></div>
                 
@@ -150,22 +171,12 @@ const PatientDashboard = () => {
                 </div>
             </div>
 
-            {/* Health Pulse Row */}
+            {/* Quick Actions Hub - Moved to its own row */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-                <PulseWidget label="Blood Group" value={profile?.blood_group || 'N/A'} icon="🩸" color="#ef4444" />
-                <PulseWidget label="Heart Rate" value="72" unit="bpm" icon="💓" color="#ec4899" />
-                <PulseWidget label="Height" value="175" unit="cm" icon="📏" color="#3b82f6" />
-                <PulseWidget label="Weight" value="68" unit="kg" icon="⚖️" color="#10b981" />
-            </div>
-
-            {/* Main Interactive Row (Quick Actions Hub + Small Info) */}
-            <div style={{ marginBottom: '40px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
-                    <ActionCard to="/appointments" title="Book Visit" icon="📅" desc="Schedule new visit" />
-                    <ActionCard to="/records" title="Vault" icon="🔒" desc="Manage records" />
-                    <ActionCard to="/ai-summarizer" title="AI Audit" icon="✨" desc="Smart analysis" />
-                    <ActionCard to="/profile" title="Profile" icon="⚙️" desc="Edit details" />
-                </div>
+                <ActionCard to="/appointments" title="Book Visit" icon="📅" desc="Schedule new visit" />
+                <ActionCard to="/records" title="Vault" icon="🔒" desc="Manage records" />
+                <ActionCard to="/ai-summarizer" title="AI Audit" icon="✨" desc="Smart analysis" />
+                <ActionCard to="/profile" title="Profile" icon="⚙️" desc="Edit details" />
             </div>
 
             {/* Previews Grid */}
