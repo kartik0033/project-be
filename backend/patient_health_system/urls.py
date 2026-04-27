@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/medical/', include('medical.urls')),
+    path('api/ai/', include('ai_assistant.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
