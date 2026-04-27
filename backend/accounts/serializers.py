@@ -32,7 +32,7 @@ class PatientProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PatientProfile
-        fields = ['full_name', 'age', 'gender', 'address', 'blood_group', 'allergies', 'chronic_conditions', 'emergency_contact', 'qr_code_image', 'profile_picture', 'aadhaar_number', 'mobile_number']
+        fields = ['full_name', 'age', 'gender', 'address', 'blood_group', 'allergies', 'chronic_conditions', 'emergency_contact', 'height', 'weight', 'qr_code_image', 'profile_picture', 'aadhaar_number', 'mobile_number']
 
 class OTPSerializer(serializers.Serializer):
     mobile_number = serializers.CharField()

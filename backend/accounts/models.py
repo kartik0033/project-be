@@ -32,6 +32,8 @@ class PatientProfile(models.Model):
     allergies = models.TextField(blank=True)
     chronic_conditions = models.TextField(blank=True)
     emergency_contact = models.CharField(max_length=15, blank=True)
+    height = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)  # in cm
+    weight = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)  # in kg
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     qr_code_image = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
@@ -58,13 +60,30 @@ class OTP(models.Model):
     def __str__(self):
         return f'{self.mobile_number} - {self.otp}'
 
-# Signal to delete QR code image when PatientProfile is deleted
-from django.db.models.signals import post_delete
+# Signals to clean up files when models are deleted or updated
+from django.db.models.signals import post_delete, pre_save
 from django.dispatch import receiver
 import os
 
+# 1. Delete profile picture AND QR code when PatientProfile is deleted
 @receiver(post_delete, sender=PatientProfile)
-def delete_qr_code_image(sender, instance, **kwargs):
+def delete_profile_files_on_delete(sender, instance, **kwargs):
     if instance.qr_code_image:
         if os.path.isfile(instance.qr_code_image.path):
             os.remove(instance.qr_code_image.path)
+    if instance.profile_picture:
+        if os.path.isfile(instance.profile_picture.path):
+            os.remove(instance.profile_picture.path)
+
+# 2. Delete OLD profile picture from disk when a new one is uploaded
+@receiver(pre_save, sender=PatientProfile)
+def delete_old_profile_picture_on_update(sender, instance, **kwargs):
+    if not instance.pk:
+        return  # New instance, nothing to delete
+    try:
+        old = PatientProfile.objects.get(pk=instance.pk)
+    except PatientProfile.DoesNotExist:
+        return
+    if old.profile_picture and old.profile_picture != instance.profile_picture:
+        if os.path.isfile(old.profile_picture.path):
+            os.remove(old.profile_picture.path)

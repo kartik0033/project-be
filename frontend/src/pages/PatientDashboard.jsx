@@ -100,8 +100,8 @@ const PatientDashboard = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
                 <PulseWidget label="Blood Group" value={profile?.blood_group || 'N/A'} icon="🩸" color="#ef4444" />
                 <PulseWidget label="Heart Rate" value="72" unit="bpm" icon="💓" color="#ec4899" />
-                <PulseWidget label="Height" value="175" unit="cm" icon="📏" color="#3b82f6" />
-                <PulseWidget label="Weight" value="68" unit="kg" icon="⚖️" color="#10b981" />
+                <PulseWidget label="Height" value={profile?.height || '—'} unit={profile?.height ? 'cm' : ''} icon="📏" color="#3b82f6" />
+                <PulseWidget label="Weight" value={profile?.weight || '—'} unit={profile?.weight ? 'kg' : ''} icon="⚖️" color="#10b981" />
             </div>
 
             {/* Digital ID Card Section - Restored previous style/alignment */}

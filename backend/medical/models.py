@@ -56,6 +56,35 @@ class MedicalRecord(models.Model):
     def __str__(self):
         return f"{self.title} - {self.patient.aadhaar_number}"
 
+class Prescription(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='prescriptions')
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='prescriptions')
+    appointment = models.ForeignKey('Appointment', on_delete=models.SET_NULL, null=True, blank=True, related_name='prescriptions')
+    diagnosis = models.TextField(blank=True)
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Prescription by Dr.{self.doctor.full_name} for {self.patient.aadhaar_number}"
+
+class PrescriptionItem(models.Model):
+    FREQUENCY_CHOICES = [
+        ('OD', 'Once a day'),
+        ('BD', 'Twice a day'),
+        ('TDS', 'Three times a day'),
+        ('QID', 'Four times a day'),
+        ('SOS', 'As needed'),
+    ]
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, related_name='items')
+    medicine_name = models.CharField(max_length=255)
+    dosage = models.CharField(max_length=100)  # e.g. "500mg"
+    frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOICES, default='OD')
+    duration = models.CharField(max_length=100, blank=True)  # e.g. "7 days"
+    instructions = models.TextField(blank=True)  # e.g. "Take after food"
+
+    def __str__(self):
+        return f"{self.medicine_name} ({self.dosage})"
+
 class Appointment(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -74,3 +103,29 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"{self.patient.aadhaar_number} with {self.doctor} on {self.appointment_date}"
+
+# Signals to clean up medical record files on delete or file replacement
+from django.db.models.signals import post_delete, pre_save
+from django.dispatch import receiver
+import os
+
+@receiver(post_delete, sender=MedicalRecord)
+def delete_medical_record_file_on_delete(sender, instance, **kwargs):
+    """Delete the actual file from disk when a MedicalRecord is deleted."""
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
+
+@receiver(pre_save, sender=MedicalRecord)
+def delete_old_medical_record_file_on_update(sender, instance, **kwargs):
+    """Delete the old file from disk when a MedicalRecord file is replaced."""
+    if not instance.pk:
+        return
+    try:
+        old = MedicalRecord.objects.get(pk=instance.pk)
+    except MedicalRecord.DoesNotExist:
+        return
+    if old.file and old.file != instance.file:
+        if os.path.isfile(old.file.path):
+            os.remove(old.file.path)
+

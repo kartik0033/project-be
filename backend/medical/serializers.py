@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Doctor, MedicalRecord, Appointment, ReportCategory, ReportTitleSuggestion, Facility
+from .models import Doctor, MedicalRecord, Appointment, ReportCategory, ReportTitleSuggestion, Facility, Prescription, PrescriptionItem
 
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,3 +51,32 @@ class AppointmentSerializer(serializers.ModelSerializer):
         if hasattr(obj.patient, 'profile'):
             return obj.patient.profile.full_name
         return f"Aadhaar: {obj.patient.aadhaar_number}"
+
+class PrescriptionItemSerializer(serializers.ModelSerializer):
+    frequency_display = serializers.CharField(source='get_frequency_display', read_only=True)
+    class Meta:
+        model = PrescriptionItem
+        fields = ['id', 'medicine_name', 'dosage', 'frequency', 'frequency_display', 'duration', 'instructions']
+
+class PrescriptionSerializer(serializers.ModelSerializer):
+    items = PrescriptionItemSerializer(many=True)
+    doctor_name = serializers.CharField(source='doctor.full_name', read_only=True)
+    patient_name = serializers.SerializerMethodField(read_only=True)
+    patient_aadhaar = serializers.CharField(source='patient.aadhaar_number', read_only=True)
+
+    class Meta:
+        model = Prescription
+        fields = ['id', 'patient', 'doctor', 'doctor_name', 'patient_name', 'patient_aadhaar', 'appointment', 'diagnosis', 'notes', 'items', 'created_at']
+        read_only_fields = ['doctor']
+
+    def get_patient_name(self, obj):
+        if hasattr(obj.patient, 'profile'):
+            return obj.patient.profile.full_name
+        return f"Aadhaar: {obj.patient.aadhaar_number}"
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('items')
+        prescription = Prescription.objects.create(**validated_data)
+        for item in items_data:
+            PrescriptionItem.objects.create(prescription=prescription, **item)
+        return prescription

@@ -13,6 +13,8 @@ const Profile = () => {
         allergies: '',
         chronic_conditions: '',
         emergency_contact: '',
+        height: '',
+        weight: '',
         profile_picture: null
     });
     
@@ -38,6 +40,8 @@ const Profile = () => {
                     allergies: res.data.allergies || '',
                     chronic_conditions: res.data.chronic_conditions || '',
                     emergency_contact: res.data.emergency_contact || '',
+                    height: res.data.height || '',
+                    weight: res.data.weight || '',
                     profile_picture: null
                 };
                 setFormData(profileData);
@@ -298,6 +302,14 @@ const Profile = () => {
                                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Emergency Contact Number</label>
                                 <input type="text" name="emergency_contact" value={formData.emergency_contact} onChange={handleChange} placeholder="e.g. Spouse or Parent" style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #cbd5e1', fontSize: '1rem', outline: 'none' }} />
                             </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Height (cm)</label>
+                                <input type="number" name="height" value={formData.height} onChange={handleChange} placeholder="e.g. 170" style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #cbd5e1', fontSize: '1rem', outline: 'none' }} />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Weight (kg)</label>
+                                <input type="number" name="weight" value={formData.weight} onChange={handleChange} placeholder="e.g. 65" style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #cbd5e1', fontSize: '1rem', outline: 'none' }} />
+                            </div>
                             <div style={{ gridColumn: '1 / -1' }}>
                                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Known Allergies</label>
                                 <input type="text" name="allergies" value={formData.allergies} onChange={handleChange} placeholder="e.g. Penicillin, Peanuts" style={{ width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid #cbd5e1', fontSize: '1rem', outline: 'none' }} />
@@ -333,6 +345,8 @@ const Profile = () => {
                             <DisplayField label="Age" value={formData.age + " Years"} />
                             <DisplayField label="Gender" value={formData.gender === 'M' ? 'Male' : formData.gender === 'F' ? 'Female' : 'Other'} />
                             <DisplayField label="Address" value={formData.address} />
+                            <DisplayField label="Height" value={formData.height ? `${formData.height} cm` : null} />
+                            <DisplayField label="Weight" value={formData.weight ? `${formData.weight} kg` : null} />
                         </div>
                         <div>
                             <h4 style={{ marginBottom: '20px', color: '#dc2626', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Medical Information</h4>
