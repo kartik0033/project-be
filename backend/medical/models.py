@@ -7,6 +7,7 @@ class Doctor(models.Model):
     full_name = models.CharField(max_length=255)
     specialization = models.CharField(max_length=255)
     contact_number = models.CharField(max_length=15)
+    facility = models.ForeignKey('Facility', on_delete=models.SET_NULL, null=True, blank=True, related_name='doctors')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -104,10 +105,87 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.patient.aadhaar_number} with {self.doctor} on {self.appointment_date}"
 
+class Medication(models.Model):
+    TIMING_CHOICES = [
+        ('morning', 'Morning'),
+        ('afternoon', 'Afternoon'),
+        ('night', 'Night'),
+    ]
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='tracked_medications')
+    prescription_item = models.OneToOneField(PrescriptionItem, on_delete=models.SET_NULL, null=True, blank=True, related_name='tracker')
+    name = models.CharField(max_length=255)
+    dosage = models.CharField(max_length=100)
+    # Store timing as comma-separated or JSON
+    timings = models.CharField(max_length=100, help_text="Comma separated: morning,afternoon,night")
+    instructions = models.TextField(blank=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} for {self.patient.user.username}"
+
+class MedicationLog(models.Model):
+    STATUS_CHOICES = [
+        ('taken', 'Taken'),
+        ('missed', 'Missed'),
+        ('snoozed', 'Snoozed'),
+    ]
+    medication = models.ForeignKey(Medication, on_delete=models.CASCADE, related_name='logs')
+    date = models.DateField()
+    timing = models.CharField(max_length=20) # morning, afternoon, night
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='taken')
+    logged_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('medication', 'date', 'timing')
+
+class Notification(models.Model):
+    SEVERITY_CHOICES = [
+        ('critical', 'Critical'),
+        ('warning', 'Warning'),
+        ('info', 'Info'),
+    ]
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='notifications')
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    severity = models.CharField(max_length=10, choices=SEVERITY_CHOICES, default='info')
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.severity.upper()}: {self.title}"
+
 # Signals to clean up medical record files on delete or file replacement
-from django.db.models.signals import post_delete, pre_save
+from django.db.models.signals import post_delete, pre_save, post_save
 from django.dispatch import receiver
 import os
+
+@receiver(post_save, sender=PrescriptionItem)
+def create_medication_tracker(sender, instance, created, **kwargs):
+    """Automatically create a tracker entry when a prescription item is created."""
+    if created:
+        # Map prescription frequency to timings
+        mapping = {
+            'OD': 'morning',
+            'BD': 'morning,night',
+            'TDS': 'morning,afternoon,night',
+            'QID': 'morning,afternoon,night', # Simplified
+            'SOS': 'morning' # Default
+        }
+        Medication.objects.create(
+            patient=instance.prescription.patient,
+            prescription_item=instance,
+            name=instance.medicine_name,
+            dosage=instance.dosage,
+            timings=mapping.get(instance.frequency, 'morning'),
+            instructions=instance.instructions,
+            start_date=instance.prescription.created_at.date(),
+            end_date=instance.prescription.created_at.date() + timedelta(days=7) # Default 7 days if not specified
+        )
+
+from datetime import timedelta
 
 @receiver(post_delete, sender=MedicalRecord)
 def delete_medical_record_file_on_delete(sender, instance, **kwargs):

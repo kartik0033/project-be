@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions, filters
-from .models import Doctor, MedicalRecord, Appointment, ReportCategory, Facility, Prescription
-from .serializers import DoctorSerializer, MedicalRecordSerializer, AppointmentSerializer, ReportCategorySerializer, FacilitySerializer, PrescriptionSerializer
+from .models import Doctor, MedicalRecord, Appointment, ReportCategory, Facility, Prescription, Medication, MedicationLog, Notification
+from .serializers import DoctorSerializer, MedicalRecordSerializer, AppointmentSerializer, ReportCategorySerializer, FacilitySerializer, PrescriptionSerializer, MedicationSerializer, MedicationLogSerializer, NotificationSerializer
 
 class ReportCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ReportCategory.objects.filter(is_active=True).prefetch_related('suggestions')
@@ -135,4 +135,31 @@ class QRScannerAPI(APIView):
             }, status=status.HTTP_200_OK)
         except Patient.DoesNotExist:
             return Response({'error': 'Invalid QR Code'}, status=status.HTTP_404_NOT_FOUND)
+
+class MedicationViewSet(viewsets.ModelViewSet):
+    serializer_class = MedicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Medication.objects.filter(patient=self.request.user.patient, is_active=True).prefetch_related('logs')
+
+    def perform_create(self, serializer):
+        serializer.save(patient=self.request.user.patient)
+
+class MedicationLogViewSet(viewsets.ModelViewSet):
+    serializer_class = MedicationLogSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return MedicationLog.objects.filter(medication__patient=self.request.user.patient)
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(patient=self.request.user.patient).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(patient=self.request.user.patient)
 

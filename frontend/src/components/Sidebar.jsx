@@ -29,93 +29,165 @@ const Sidebar = () => {
             transition: 'all 0.3s ease',
             position: 'relative'
         }}>
-            <h2 style={{ marginBottom: '40px', fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center', color: '#2563eb' }}>Health Card</h2>
+            <h2 style={{ marginBottom: '40px', fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center', color: '#2563eb' }}>Health System</h2>
 
             <nav style={{ display: 'flex', flexDirection: 'column', gap: '15px', flex: 1, marginTop: isOpen ? '0' : '20px' }}>
-                <Link to="/patient-dashboard" style={{
-                    color: isActive('/patient-dashboard') ? '#2563eb' : '#475569',
-                    textDecoration: 'none',
-                    padding: '12px 15px',
-                    background: isActive('/patient-dashboard') ? '#eff6ff' : 'transparent',
-                    borderRadius: '8px',
-                    fontSize: '1.1rem',
-                    fontWeight: isActive('/patient-dashboard') ? '600' : '400',
-                    transition: 'all 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: isOpen ? 'flex-start' : 'center'
-                }}>
-                    <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>🏠</span>
-                    {isOpen && "Dashboard"}
-                </Link>
+                {sessionStorage.getItem('user_role') === 'doctor' ? (
+                    <>
+                        <Link to="/doctor-dashboard" style={{
+                            color: isActive('/doctor-dashboard') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/doctor-dashboard') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/doctor-dashboard') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>🏠</span>
+                            {isOpen && "Overview"}
+                        </Link>
+                        <Link to="/doctor-manage" style={{
+                            color: isActive('/doctor-manage') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/doctor-manage') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/doctor-manage') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>👥</span>
+                            {isOpen && "Manage Patients"}
+                        </Link>
+                        <Link to="/scanner" style={{
+                            color: isActive('/scanner') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/scanner') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/scanner') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>📷</span>
+                            {isOpen && "QR Scanner"}
+                        </Link>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/patient-dashboard" style={{
+                            color: isActive('/patient-dashboard') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/patient-dashboard') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/patient-dashboard') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>🏠</span>
+                            {isOpen && "Dashboard"}
+                        </Link>
 
-                <Link to="/profile" style={{
-                    color: isActive('/profile') ? '#2563eb' : '#475569',
-                    textDecoration: 'none',
-                    padding: '12px 15px',
-                    background: isActive('/profile') ? '#eff6ff' : 'transparent',
-                    borderRadius: '8px',
-                    fontSize: '1.1rem',
-                    fontWeight: isActive('/profile') ? '600' : '400',
-                    transition: 'all 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: isOpen ? 'flex-start' : 'center'
-                }}>
-                    <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>👤</span>
-                    {isOpen && "Profile"}
-                </Link>
+                        <Link to="/profile" style={{
+                            color: isActive('/profile') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/profile') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/profile') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>👤</span>
+                            {isOpen && "Profile"}
+                        </Link>
 
-                <Link to="/records" style={{
-                    color: isActive('/records') ? '#2563eb' : '#475569',
-                    textDecoration: 'none',
-                    padding: '12px 15px',
-                    background: isActive('/records') ? '#eff6ff' : 'transparent',
-                    borderRadius: '8px',
-                    fontSize: '1.1rem',
-                    fontWeight: isActive('/records') ? '600' : '400',
-                    transition: 'all 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: isOpen ? 'flex-start' : 'center'
-                }}>
-                    <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>📄</span>
-                    {isOpen && "My Records"}
-                </Link>
+                        <Link to="/records" style={{
+                            color: isActive('/records') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/records') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/records') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>📄</span>
+                            {isOpen && "My Records"}
+                        </Link>
 
-                <Link to="/appointments" style={{
-                    color: isActive('/appointments') ? '#2563eb' : '#475569',
-                    textDecoration: 'none',
-                    padding: '12px 15px',
-                    background: isActive('/appointments') ? '#eff6ff' : 'transparent',
-                    borderRadius: '8px',
-                    fontSize: '1.1rem',
-                    fontWeight: isActive('/appointments') ? '600' : '400',
-                    transition: 'all 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: isOpen ? 'flex-start' : 'center'
-                }}>
-                    <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>📅</span>
-                    {isOpen && "Appointments"}
-                </Link>
+                        <Link to="/appointments" style={{
+                            color: isActive('/appointments') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/appointments') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/appointments') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>📅</span>
+                            {isOpen && "Appointments"}
+                        </Link>
 
-                <Link to="/ai-summarizer" style={{
-                    color: isActive('/ai-summarizer') ? '#2563eb' : '#475569',
-                    textDecoration: 'none',
-                    padding: '12px 15px',
-                    background: isActive('/ai-summarizer') ? '#eff6ff' : 'transparent',
-                    borderRadius: '8px',
-                    fontSize: '1.1rem',
-                    fontWeight: isActive('/ai-summarizer') ? '600' : '400',
-                    transition: 'all 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: isOpen ? 'flex-start' : 'center'
-                }}>
-                    <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>✨</span>
-                    {isOpen && "AI Summarizer"}
-                </Link>
+                        <Link to="/medication-tracker" style={{
+                            color: isActive('/medication-tracker') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/medication-tracker') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/medication-tracker') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>💊</span>
+                            {isOpen && "Medicine"}
+                        </Link>
+
+                        <Link to="/ai-summarizer" style={{
+                            color: isActive('/ai-summarizer') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/ai-summarizer') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/ai-summarizer') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>✨</span>
+                            {isOpen && "AI Summarizer"}
+                        </Link>
+                    </>
+                )}
             </nav>
 
             <button

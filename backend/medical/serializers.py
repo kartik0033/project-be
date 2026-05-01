@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Doctor, MedicalRecord, Appointment, ReportCategory, ReportTitleSuggestion, Facility, Prescription, PrescriptionItem
+from .models import Doctor, MedicalRecord, Appointment, ReportCategory, ReportTitleSuggestion, Facility, Prescription, PrescriptionItem, Medication, MedicationLog, Notification
 
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -80,3 +80,29 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         for item in items_data:
             PrescriptionItem.objects.create(prescription=prescription, **item)
         return prescription
+
+class MedicationLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedicationLog
+        fields = '__all__'
+
+class MedicationSerializer(serializers.ModelSerializer):
+    logs = MedicationLogSerializer(many=True, read_only=True)
+    today_logs = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Medication
+        fields = '__all__'
+        read_only_fields = ['patient', 'prescription_item']
+
+    def get_today_logs(self, obj):
+        from datetime import date
+        today = date.today()
+        logs = obj.logs.filter(date=today)
+        return MedicationLogSerializer(logs, many=True).data
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+        read_only_fields = ['patient']

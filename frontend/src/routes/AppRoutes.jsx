@@ -8,6 +8,7 @@ import Profile from '../pages/Profile';
 import Records from '../pages/Records';
 import Appointments from '../pages/Appointments';
 import AiSummarizer from '../pages/AiSummarizer';
+import MedicationTracker from '../pages/MedicationTracker';
 import Layout from '../components/Layout';
 
 // Doctor pages
@@ -45,19 +46,22 @@ const AppRoutes = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Doctor Protected Routes (No standard navbar required for simplicity) */}
-          <Route path="/doctor-dashboard" element={
-            <DoctorRoute><DoctorDashboard /></DoctorRoute>
-          } />
-          <Route path="/scanner" element={
-            <DoctorRoute><QRScanner /></DoctorRoute>
-          } />
-          <Route path="/patient-view" element={
-            <DoctorRoute><PatientView /></DoctorRoute>
-          } />
-
-          {/* Patient Protected Routes (With Navbar Layout) */}
+          {/* Doctor Protected Routes (Now with Layout) */}
           <Route element={<Layout />}>
+            <Route path="/doctor-dashboard" element={
+              <DoctorRoute><DoctorDashboard /></DoctorRoute>
+            } />
+            <Route path="/doctor-manage" element={
+              <DoctorRoute><DoctorDashboard /></DoctorRoute>
+            } />
+            <Route path="/scanner" element={
+              <DoctorRoute><QRScanner /></DoctorRoute>
+            } />
+            <Route path="/patient-view" element={
+              <DoctorRoute><PatientView /></DoctorRoute>
+            } />
+
+            {/* Patient Protected Routes (With Navbar Layout) */}
             <Route path="/patient-dashboard" element={
               <PatientRoute>
                 <PatientDashboard />
@@ -81,6 +85,11 @@ const AppRoutes = () => {
             <Route path="/ai-summarizer" element={
               <PatientRoute>
                 <AiSummarizer />
+              </PatientRoute>
+            } />
+            <Route path="/medication-tracker" element={
+              <PatientRoute>
+                <MedicationTracker />
               </PatientRoute>
             } />
           </Route>
