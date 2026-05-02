@@ -14,10 +14,45 @@ class FacilityViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
 
-class DoctorViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Doctor.objects.all()
+    def check_admin(self):
+        if not self.request.user.is_staff:
+            self.permission_denied(self.request, message="Only admins can perform this action.")
+
+    def perform_create(self, serializer):
+        self.check_admin()
+        serializer.save()
+
+    def perform_update(self, serializer):
+        self.check_admin()
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self.check_admin()
+        instance.delete()
+
+class DoctorViewSet(viewsets.ModelViewSet):
+    queryset = Doctor.objects.select_related('facility').all()
     serializer_class = DoctorSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def check_admin(self):
+        if not self.request.user.is_staff:
+            self.permission_denied(self.request, message="Only admins can perform this action.")
+
+    def perform_create(self, serializer):
+        self.check_admin()
+        serializer.save()
+
+    def perform_update(self, serializer):
+        self.check_admin()
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        self.check_admin()
+        # Delete the underlying user account as well
+        user = instance.user
+        instance.delete()
+        user.delete()
 
 class MedicalRecordViewSet(viewsets.ModelViewSet):
     serializer_class = MedicalRecordSerializer
@@ -163,3 +198,39 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(patient=self.request.user.patient)
 
+from django.contrib.auth.models import User
+
+class AdminAddDoctorAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        full_name = request.data.get('full_name')
+        specialization = request.data.get('specialization')
+        contact_number = request.data.get('contact_number')
+        facility_id = request.data.get('facility_id')
+        profile_image = request.FILES.get('profile_image')
+
+        if not all([email, password, full_name, specialization, facility_id]):
+            return Response({'error': 'All fields except profile image are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(username=email).exists():
+            return Response({'error': 'User with this email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.create_user(username=email, email=email, password=password)
+            facility = Facility.objects.get(id=facility_id)
+            doctor = Doctor.objects.create(
+                user=user,
+                full_name=full_name,
+                specialization=specialization,
+                contact_number=contact_number,
+                facility=facility,
+                profile_image=profile_image
+            )
+            return Response({'msg': 'Doctor created successfully', 'doctor_id': doctor.id}, status=status.HTTP_201_CREATED)
+        except Facility.DoesNotExist:
+            return Response({'error': 'Facility not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -3,6 +3,9 @@ import Notifications from './Notifications';
 
 const Header = () => {
     const [isNotifOpen, setIsNotifOpen] = useState(false);
+    const userRole = sessionStorage.getItem('user_role');
+
+    if (userRole !== 'patient') return null;
 
     return (
         <div style={{ position: 'fixed', bottom: '40px', right: '40px', zIndex: 900 }}>

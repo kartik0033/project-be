@@ -32,7 +32,58 @@ const Sidebar = () => {
             <h2 style={{ marginBottom: '40px', fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center', color: '#2563eb' }}>Health System</h2>
 
             <nav style={{ display: 'flex', flexDirection: 'column', gap: '15px', flex: 1, marginTop: isOpen ? '0' : '20px' }}>
-                {sessionStorage.getItem('user_role') === 'doctor' ? (
+                {sessionStorage.getItem('user_role') === 'admin' ? (
+                    <>
+                        <Link to="/admin-dashboard" style={{
+                            color: isActive('/admin-dashboard') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/admin-dashboard') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/admin-dashboard') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>📊</span>
+                            {isOpen && "Admin Overview"}
+                        </Link>
+                        <Link to="/admin/doctors" style={{
+                            color: isActive('/admin/doctors') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/admin/doctors') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/admin/doctors') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>🩺</span>
+                            {isOpen && "Manage Doctors"}
+                        </Link>
+                        <Link to="/admin/facilities" style={{
+                            color: isActive('/admin/facilities') ? '#2563eb' : '#475569',
+                            textDecoration: 'none',
+                            padding: '12px 15px',
+                            background: isActive('/admin/facilities') ? '#eff6ff' : 'transparent',
+                            borderRadius: '8px',
+                            fontSize: '1.1rem',
+                            fontWeight: isActive('/admin/facilities') ? '600' : '400',
+                            transition: 'all 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: isOpen ? 'flex-start' : 'center'
+                        }}>
+                            <span style={{ fontSize: '1.3rem', marginRight: isOpen ? '10px' : '0' }}>🏥</span>
+                            {isOpen && "Manage Facilities"}
+                        </Link>
+                    </>
+                ) : sessionStorage.getItem('user_role') === 'doctor' ? (
                     <>
                         <Link to="/doctor-dashboard" style={{
                             color: isActive('/doctor-dashboard') ? '#2563eb' : '#475569',

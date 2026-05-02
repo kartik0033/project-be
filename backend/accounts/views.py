@@ -89,7 +89,9 @@ class LoginAPI(APIView):
             return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
         role = 'patient'
-        if hasattr(user, 'doctor_profile'):
+        if user.is_staff:
+            role = 'admin'
+        elif hasattr(user, 'doctor_profile'):
             role = 'doctor'
 
         tokens = get_tokens_for_user(user)
@@ -116,7 +118,8 @@ class ProfileAPI(APIView):
             return Response({
                 'role': 'doctor',
                 'full_name': doc.full_name,
-                'specialization': doc.specialization
+                'specialization': doc.specialization,
+                'profile_image': doc.profile_image.url if doc.profile_image else None
             }, status=status.HTTP_200_OK)
 
         try:

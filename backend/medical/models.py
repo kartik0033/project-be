@@ -8,6 +8,7 @@ class Doctor(models.Model):
     specialization = models.CharField(max_length=255)
     contact_number = models.CharField(max_length=15)
     facility = models.ForeignKey('Facility', on_delete=models.SET_NULL, null=True, blank=True, related_name='doctors')
+    profile_image = models.ImageField(upload_to='doctor_profiles/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -59,7 +60,7 @@ class MedicalRecord(models.Model):
 
 class Prescription(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='prescriptions')
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='prescriptions')
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='prescriptions')
     appointment = models.ForeignKey('Appointment', on_delete=models.SET_NULL, null=True, blank=True, related_name='prescriptions')
     diagnosis = models.TextField(blank=True)
     notes = models.TextField(blank=True)
@@ -95,7 +96,7 @@ class Appointment(models.Model):
     ]
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='appointments')
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True, related_name='appointments')
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')

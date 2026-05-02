@@ -96,7 +96,31 @@ const DoctorDashboard = () => {
                 {/* OVERVIEW TAB */}
                 {activeTab === 'overview' && (
                     <div>
-                        <div className="doc-greeting">Good day, Dr. {user?.full_name?.split(' ')[0]}! 👋</div>
+                        <div className="doc-greeting" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                            <div style={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                                backgroundColor: '#e2e8f0',
+                                backgroundImage: `url(${user?.profile_image ? 'http://localhost:8000' + user.profile_image : ''})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '1.8rem',
+                                border: '3px solid white',
+                                boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                            }}>
+                                {!user?.profile_image && '🧑‍⚕️'}
+                            </div>
+                            <div>
+                                Good day, Dr. {user?.full_name?.split(' ')[0]}! 👋
+                                <div style={{ fontSize: '1rem', color: '#64748b', fontWeight: '500', marginTop: '2px' }}>
+                                    {user?.specialization}
+                                </div>
+                            </div>
+                        </div>
 
                         {/* Stat Widgets */}
                         <div className="stat-grid">

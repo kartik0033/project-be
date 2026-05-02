@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Doctor, MedicalRecord, Appointment, ReportCategory, ReportTitleSuggestion, Facility, Prescription, PrescriptionItem, Medication, MedicationLog, Notification
 
 class DoctorSerializer(serializers.ModelSerializer):
+    facility_name = serializers.CharField(source='facility.name', read_only=True)
+    
     class Meta:
         model = Doctor
         fields = '__all__'

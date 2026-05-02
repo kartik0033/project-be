@@ -23,7 +23,9 @@ const Login = () => {
                 password: formData.password
             });
             login(res.data);
-            if (res.data.role === 'doctor') {
+            if (res.data.role === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (res.data.role === 'doctor') {
                 navigate('/doctor-dashboard');
             } else {
                 navigate('/patient-dashboard');
@@ -85,16 +87,23 @@ const Login = () => {
                     <button
                         className={`switch-btn ${role === 'patient' ? 'active' : ''}`}
                         onClick={() => { setRole('patient'); setMethod('password'); }}
-                        style={{ flex: 1, padding: '8px', borderRadius: '6px', background: role === 'patient' ? '#3b82f6' : 'transparent', color: role === 'patient' ? 'white' : '#1d4ed8', textDecoration: 'none' }}
+                        style={{ flex: 1, padding: '8px', borderRadius: '6px', background: role === 'patient' ? '#3b82f6' : 'transparent', color: role === 'patient' ? 'white' : '#1d4ed8', textDecoration: 'none', border: 'none', cursor: 'pointer' }}
                     >
                         Patient
                     </button>
                     <button
                         className={`switch-btn ${role === 'doctor' ? 'active' : ''}`}
                         onClick={() => setRole('doctor')}
-                        style={{ flex: 1, padding: '8px', borderRadius: '6px', background: role === 'doctor' ? '#3b82f6' : 'transparent', color: role === 'doctor' ? 'white' : '#1d4ed8', textDecoration: 'none' }}
+                        style={{ flex: 1, padding: '8px', borderRadius: '6px', background: role === 'doctor' ? '#3b82f6' : 'transparent', color: role === 'doctor' ? 'white' : '#1d4ed8', textDecoration: 'none', border: 'none', cursor: 'pointer' }}
                     >
                         Doctor
+                    </button>
+                    <button
+                        className={`switch-btn ${role === 'admin' ? 'active' : ''}`}
+                        onClick={() => setRole('admin')}
+                        style={{ flex: 1, padding: '8px', borderRadius: '6px', background: role === 'admin' ? '#3b82f6' : 'transparent', color: role === 'admin' ? 'white' : '#1d4ed8', textDecoration: 'none', border: 'none', cursor: 'pointer' }}
+                    >
+                        Admin
                     </button>
                 </div>
 
@@ -118,18 +127,18 @@ const Login = () => {
 
                 {error && <div className="error">{error}</div>}
 
-                {(role === 'doctor' || (role === 'patient' && method === 'password')) ? (
+                {(role === 'doctor' || role === 'admin' || (role === 'patient' && method === 'password')) ? (
                     <form onSubmit={handleLogin}>
                         <input
                             type="text"
-                            placeholder={role === 'doctor' ? "Doctor ID / Username" : "Aadhaar Number"}
+                            placeholder={role === 'admin' ? "Admin Username" : role === 'doctor' ? "Doctor Email / Username" : "Aadhaar Number"}
                             value={formData.identifier}
                             onChange={(e) => setFormData({ ...formData, identifier: e.target.value })}
                             required
                             pattern={role === 'patient' ? "\\d{12}" : undefined}
                             minLength={role === 'patient' ? "12" : undefined}
                             maxLength={role === 'patient' ? "12" : undefined}
-                            title={role === 'patient' ? "Aadhaar number must be exactly 12 digits" : "Enter your Doctor ID"}
+                            title={role === 'patient' ? "Aadhaar number must be exactly 12 digits" : "Enter your Username"}
                         />
                         <input
                             type="password"
@@ -138,7 +147,9 @@ const Login = () => {
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             required
                         />
-                        <button type="submit">Login as {role === 'doctor' ? 'Doctor' : 'Patient'}</button>
+                        <button type="submit">
+                            Login as {role === 'admin' ? 'Admin' : role === 'doctor' ? 'Doctor' : 'Patient'}
+                        </button>
                     </form>
                 ) : (
                     <div className="qr-container">
@@ -180,6 +191,18 @@ const Login = () => {
                             style={{ padding: '6px 12px', fontSize: '0.8rem', background: '#fce7f3', color: '#db2777', border: '1px solid #fbcfe8', borderRadius: '4px', cursor: 'pointer' }}
                         >
                             Fill Doctor
+                        </button>
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setRole('admin');
+                                setMethod('password');
+                                setFormData({ identifier: 'admin', password: 'Admin@123' });
+                            }}
+                            style={{ padding: '6px 12px', fontSize: '0.8rem', background: '#fef3c7', color: '#d97706', border: '1px solid #fde68a', borderRadius: '4px', cursor: 'pointer' }}
+                        >
+                            Fill Admin
                         </button>
                     </div>
                 </div>

@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     DoctorViewSet, MedicalRecordViewSet, AppointmentViewSet, QRScannerAPI, 
     ReportCategoryViewSet, FacilityViewSet, PrescriptionViewSet, 
-    PatientListForDoctor, MedicationViewSet, MedicationLogViewSet, NotificationViewSet
+    PatientListForDoctor, MedicationViewSet, MedicationLogViewSet, NotificationViewSet,
+    AdminAddDoctorAPI
 )
 
 router = DefaultRouter()
@@ -21,4 +22,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('scan/', QRScannerAPI.as_view(), name='scan-qr'),
     path('doctor/patients/', PatientListForDoctor.as_view(), name='doctor-patients'),
+    path('admin/add-doctor/', AdminAddDoctorAPI.as_view(), name='admin-add-doctor'),
 ]

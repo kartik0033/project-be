@@ -16,6 +16,9 @@ import DoctorDashboard from '../pages/DoctorDashboard';
 import QRScanner from '../components/QRScanner';
 import PatientView from '../pages/PatientView';
 
+// Admin pages
+import AdminDashboard from '../pages/AdminDashboard';
+
 const PatientRoute = ({ children }) => {
   const token = sessionStorage.getItem('access_token');
   const role = sessionStorage.getItem('user_role');
@@ -28,10 +31,17 @@ const DoctorRoute = ({ children }) => {
   return token && role === 'doctor' ? children : <Navigate to="/login" />;
 };
 
+const AdminRoute = ({ children }) => {
+  const token = sessionStorage.getItem('access_token');
+  const role = sessionStorage.getItem('user_role');
+  return token && role === 'admin' ? children : <Navigate to="/login" />;
+};
+
 const RootRedirect = () => {
   const token = sessionStorage.getItem('access_token');
   const role = sessionStorage.getItem('user_role');
   if (token) {
+      if (role === 'admin') return <Navigate to="/admin-dashboard" />;
       return role === 'doctor' ? <Navigate to="/doctor-dashboard" /> : <Navigate to="/patient-dashboard" />;
   }
   return <Navigate to="/login" />;
@@ -46,8 +56,13 @@ const AppRoutes = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Doctor Protected Routes (Now with Layout) */}
+          {/* Admin Protected Routes */}
           <Route element={<Layout />}>
+            <Route path="/admin-dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/admin/doctors" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+            <Route path="/admin/facilities" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+
+            {/* Doctor Protected Routes (Now with Layout) */}
             <Route path="/doctor-dashboard" element={
               <DoctorRoute><DoctorDashboard /></DoctorRoute>
             } />
